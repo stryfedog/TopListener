@@ -19,38 +19,51 @@ if(! get_magic_quotes_gpc() )
 {
    $tutorial_title = addslashes ($_POST['tutorial_title']);
    $tutorial_author = addslashes ($_POST['tutorial_author']);
+   $test_query =  addslashes ($_POST['test_query']);
 }
 else
 {
    $tutorial_title = $_POST['tutorial_title'];
    $tutorial_author = $_POST['tutorial_author'];
+   $test_query = $_POST['test_query'];
 }
 $submission_date = $_POST['submission_date'];
 
-
+/*
 $sql = "INSERT INTO tutorials_tbl ".
        "(tutorial_title, tutorial_author, submission_date) ".
        "VALUES ".
        "('$tutorial_title','$tutorial_author','$submission_date');";
 
 //$sql = "SELECT * from tutorials_tbl";
+*/
 $db_selected = mysql_select_db('stryfe3_TL', $conn);
 if (!$db_selected) {
     die ('Can\'t use stryfe3_TL : ' . mysql_error());
 }
-$retval = mysql_query( $sql, $conn );
+//$retval = mysql_query( $sql, $conn );
 
-
+/*
 if(!$retval)
 {
   die('Could not enter data: ' . "$sql \n" . mysql_error());
 }
+*/
 echo "Entered data successfully\n";
 
-$result = mysql_query("select Songs.*, Charts.* from Songs, Charts Where Songs.Song_ID = Charts.Song_ID ",$conn);
+if( $test_query != "")
+{
+	$query = $test_query;
+}
+else
+{
+	$query = "select Songs.*, Charts.* from Songs, Charts Where Songs.Song_ID = Charts.Song_ID ";
+}
+
+$result = mysql_query($query,$conn);
 
 echo "<table border='1'>\n<tr>";
-
+//echo "$query";
 
 $row = mysql_fetch_array($result);
 while($i <= max(array_keys($row)))
@@ -106,6 +119,14 @@ mysql_close($conn);
 <td width="250">Submission Date [ yyyy-mm-dd ]</td>
 <td>
 <input name="submission_date" type="text" id="submission_date">
+</td>
+</tr>
+<tr>
+<td width="250">Sql Test</td>
+<td>
+<textarea rows="4" cols="50" name="test_query" id="test_query">
+<?php echo "$test_query";?>
+</textarea>
 </td>
 </tr>
 <tr>
