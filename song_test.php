@@ -76,7 +76,19 @@ echo "\n </tr>";
     while($i <= max(array_keys($row)))
 	{
 		//echo "\n <th>" . mysql_field_name($result, $i) . "</th>";
-		echo "<td>" . $row[$i] . "</td>";
+		echo "<td>";
+		if ( !strncasecmp($row[$i],"http",4) )
+		{
+			echo '<a href="' . $row[$i] . '" target="_blank">';
+		}
+			
+		echo $row[$i]; 
+		if ( !strncasecmp($row[$i],"http",4) )
+		{
+			echo '</a>';
+		}
+		
+		echo "</td>\n";
 		$i++;
 	}
 	
@@ -86,16 +98,28 @@ while($row = mysql_fetch_array($result)) {
     while($i <= max(array_keys($row)))
 	{
 		//echo "\n <th>" . mysql_field_name($result, $i) . "</th>";
-		echo "<td>" . $row[$i] . "</td>";
+		echo "<td>";
+		if ( !strncasecmp($row[$i],"http",4) )
+		{
+			echo '<a href="' . $row[$i] . '" target="_blank">';
+		}
+			
+		echo $row[$i]; 
+		if ( !strncasecmp($row[$i],"http",4) )
+		{
+			echo '</a>';
+		}
+		
+		echo "</td>\n";
 		$i++;
 	}
   //echo "<td>" . $row['tutorial_title'] . "</td>";
   //echo "<td>" . $row['tutorial_author'] . "</td>";
   //echo "<td>" . $row['submission_date'] . "</td>";
-  echo "</tr>";
+  echo "</tr>\n";
 }
 
-echo "</table>";
+echo "</table>\n";
 mysql_close($conn);
 }
 
@@ -125,7 +149,7 @@ mysql_close($conn);
 <td width="250">Sql Test</td>
 <td>
 <textarea rows="4" cols="50" name="test_query" id="test_query">
-<?php echo "$test_query";?>
+<?php echo "$query";?>
 </textarea>
 </td>
 </tr>
