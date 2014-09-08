@@ -2,25 +2,26 @@
 <head>
 <title>Create Top 10 Chart in MySQL Database</title>
 <script>
-function showHint(str) {
+function showHint(str,sql_col) {
   if (str.length==0) {
-    document.getElementById("txtHint").innerHTML="";
+    document.getElementById("txtHintname").innerHTML="";
+	document.getElementById("txtHintband").innerHTML="";
     return;
   }
   var xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-      document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+      document.getElementById("txtHint"+sql_col).innerHTML=xmlhttp.responseText;
     }
   }
-  xmlhttp.open("GET","gethint.php?find="+str,true);
+  xmlhttp.open("GET","gethint.php?find="+str+"&sql_col="+sql_col,true);
   xmlhttp.send();
 }
 
-function Set_name(str)
+function Set_name(str,col)
 {
-	document.getElementById("first_name").value=str;
-	showHint("")
+	document.getElementById(col+"_name").value=str;
+	showHint("");
 }
 
 	
@@ -183,16 +184,21 @@ mysql_close($conn);
 
 <table width="600" border="0" cellspacing="1" cellpadding="2">
 <tr>
-<td>First name: </td><td><input type="text" onkeyup="showHint(this.value)" id="first_name"></td>
+<td>Song name: </td><td><input type="text" onkeyup="showHint(this.value,'name')" id="name_name"></td>
+<td>Band name: </td><td><input type="text" onkeyup="showHint(this.value,'band')" id="band_name"></td>
 </tr>
-<td>Suggestions: </td><td><span id="txtHint"></span></p></td>
+<tr>
+<td>Suggestions: </td><td><span id="txtHintname"></span></td>
+<td></td><td><span id="txtHintband"></span></td>
 </tr>
 <tr>
 </tr>
 <tr>
 </tr>
 <tr>
-</form>
+</table>
+<table>
+<tr>
 <td width="250" onclick="Set_name(this.innerHTML)">Sql Test</td>
 <td>
 <textarea rows="4" cols="50" name="test_query" id="test_query">

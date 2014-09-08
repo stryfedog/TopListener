@@ -13,41 +13,12 @@ if(isset($_GET['find']))
 	}
 }
 
-// Fill up array with names
-$a[]="Anna";
-$a[]="Brittany";
-$a[]="Cinderella";
-$a[]="Diana";
-$a[]="Eva";
-$a[]="Fiona";
-$a[]="Gunda";
-$a[]="Hege";
-$a[]="Inga";
-$a[]="Johanna";
-$a[]="Kitty";
-$a[]="Linda";
-$a[]="Nina";
-$a[]="Ophelia";
-$a[]="Petunia";
-$a[]="Amanda";
-$a[]="Raquel";
-$a[]="Cindy";
-$a[]="Doris";
-$a[]="Eve";
-$a[]="Evita";
-$a[]="Sunniva";
-$a[]="Tove";
-$a[]="Unni";
-$a[]="Violet";
-$a[]="Liza";
-$a[]="Elizabeth";
-$a[]="Ellen";
-$a[]="Wenche";
-$a[]="Vicky";
 
-$sql = "select Name from Songs where Name like '" . $_REQUEST["find"] . "%' limit 10;";
+$sql = "select distinct " . $_REQUEST["sql_col"] . " from Songs where " . $_REQUEST["sql_col"] . " like '" . $_REQUEST["find"] . "%' limit 10;";
+//echo $sql;
 $result = mysql_query($sql,$conn);
 $hint="";
+$col_quote = "'" . $_REQUEST["sql_col"] ."'";
 for($i=0; $i<10; $i++)
 {
 	
@@ -57,13 +28,13 @@ for($i=0; $i<10; $i++)
 	}
 	else
 	{
-		$name = $row['Name'];
+		$name = $row[$_REQUEST["sql_col"]];
 		if ($hint==="") {
-			$hint='<table style="border: 1px solid black; border-collapse: collapse"><tr><td onclick="Set_name(this.innerHTML)">'.$name;
+			$hint='<table style="border: 1px solid black; border-collapse: collapse"><tr><td onclick="Set_name(this.innerHTML,'.$col_quote.')">'.$name;
 		} 
 		else 
 		{
-			$hint .= '</td></tr><td onclick="Set_name(this.innerHTML)">'. "$name";
+			$hint .= '</td></tr><td onclick="Set_name(this.innerHTML,'.$col_quote.')">'. "$name";
 		}
 	}
 }
