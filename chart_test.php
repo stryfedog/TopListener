@@ -1,47 +1,66 @@
-<html>
+<!DOCTYPE html>
 <head>
 <title>Create Top 10 Chart in MySQL Database</title>
 <script>
-function showHint(str,sql_col) {
-  if (str.length==0) {
+var xmlhttp=new XMLHttpRequest();
+function showHint(str,sql_col,limit_col) 
+{
+  if (str.length==0 && sql_col.length==0) 
+  {
     document.getElementById("txtHintname").innerHTML="";
 	document.getElementById("txtHintband").innerHTML="";
+	
+	
+	if( document.getElementById("name_name").value.length >= 1 && document.getElementById("band_name").value.length >= 1)
+	{		
+		call_song();		
+	}
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  
   xmlhttp.onreadystatechange=function() {
-    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+	{
       document.getElementById("txtHint"+sql_col).innerHTML=xmlhttp.responseText;
     }
   }
-  xmlhttp.open("GET","gethint.php?find="+str+"&sql_col="+sql_col,true);
+  xmlhttp.open("GET","gethint.php?find="+str+"&sql_col="+sql_col+"&limit_col="+limit_col,true);
   xmlhttp.send();
 }
 
 function Set_name(str,col)
 {
 	document.getElementById(col+"_name").value=str;
-	showHint("");
+	showHint("","");
 }
 
+function call_song()
+{
+		
+	xmlhttp.onreadystatechange=function() {
+		
+		if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+		{
+			document.getElementById("song_id").innerHTML=xmlhttp.responseText;
+			
+		}
+	}
 	
+	xmlhttp.open("GET","getsonginfo.php?find="+document.getElementById('name_name').value+"&find2="+document.getElementById('band_name').value,true);
+	xmlhttp.send();
+	return;
+}
 </script>
 </head>
 <body>
 <form method="post" action="<?php $_PHP_SELF ?>">
 <?php
-/*
-if(isset($_POST['add']))
-{
-$dbhost = 'localhost:3036';
-$dbuser = 'stryfe3_CS';
-$dbpass = 'stryfePUB1';
-$conn = mysql_connect($dbhost, $dbuser, $dbpass);
-if(! $conn )
-{
-  die('Could not connect: ' . mysql_error());
-}
 
+if(isset($_POST['Song_ID']))
+{
+	require "db_connect.php";
+}
+/*
 if(! get_magic_quotes_gpc() )
 {
    $tutorial_title = addslashes ($_POST['tutorial_title']);
@@ -184,26 +203,63 @@ mysql_close($conn);
 
 <table width="600" border="0" cellspacing="1" cellpadding="2">
 <tr>
-<td>Song name: </td><td><input type="text" onkeyup="showHint(this.value,'name')" id="name_name"></td>
-<td>Band name: </td><td><input type="text" onkeyup="showHint(this.value,'band')" id="band_name"></td>
+<th></th>
+<td>Song name: </td><td><input type="text" autocomplete="off" onkeyup="showHint(this.value,'name','')" id="name_name"></td>
+<td>Band name: </td><td><input type="text" autocomplete="off" onclick="showHint('','band',name_name.value )" onkeyup="showHint(this.value,'band',name_name.value )" id="band_name"></td>
 </tr>
 <tr>
 <td>Suggestions: </td><td><span id="txtHintname"></span></td>
 <td></td><td><span id="txtHintband"></span></td>
 </tr>
 <tr>
+<td><span id="song_id"></span></td>
+<td><span id="chart"></span></td>
 </tr>
 <tr>
+<td>This week postion</td><td><select>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+</select>
+<tr>
+<td>Last week postion</td><td><select>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+  <option value="New">New</option>
+</select>
 </tr>
 <tr>
+<td>Chart Date</td><td><input value= "<?php echo date("Y-m-d")?>"></td>
+</tr>
+<tr>
+<td>Username</td><td><input ></td>
+</tr>
+<tr>
+<td>Private List</td><td><input type="checkbox" value="PL" id="private"></td>
+</tr>
+<tr>
+<td>List name</td><td><input value="<?php echo date("Y-m-d")?>"></td>
+</tr>
 </table>
 <table>
 <tr>
-<td width="250" onclick="Set_name(this.innerHTML)">Sql Test</td>
+<td width="250" id="test_btn" onclick="call_song()">Sql Test</td>
 <td>
-<textarea rows="4" cols="50" name="test_query" id="test_query">
-<?php echo "$query";?>
-</textarea>
 </td>
 </tr>
 <tr>
