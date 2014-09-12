@@ -13,8 +13,11 @@ if(isset($_GET['find']))
 	}
 }
 
+$limit_col = $_REQUEST["limit_col"];
+$col1 = $_REQUEST["sql_col"] ;
+$find = $_REQUEST["find"] ;
 
-$sql = "select distinct " . $_REQUEST["sql_col"] . " from Songs where " . $_REQUEST["sql_col"] . " like '" . $_REQUEST["find"] . "%' limit 10;";
+$sql = "select distinct $col1 from Songs where $col1 like '$find%' and name like '$limit_col%' limit 10;";
 //echo $sql;
 $result = mysql_query($sql,$conn);
 $hint="";

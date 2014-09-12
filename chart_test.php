@@ -56,10 +56,12 @@ function call_song()
 <form method="post" action="<?php $_PHP_SELF ?>">
 <?php
 
-if(isset($_POST['Song_ID']))
+//if(isset($_POST['Song_ID']))
 {
 	require "db_connect.php";
 }
+
+require_once "SqlIntoHtmltable.php";
 /*
 if(! get_magic_quotes_gpc() )
 {
@@ -123,82 +125,16 @@ else
 	echo "Entered data successfully\n";
 }
 
-if( $test_query != "")
-{
-	$query = $test_query;
-}
-else
-{
-	$query = "select Songs.*, Charts.* from Songs, Charts Where Songs.Song_ID = Charts.Song_ID ";
-}
-
-$result = mysql_query($query,$conn);
-
-echo "<table border='1'>\n<tr>";
-//echo "$query";
-
-$row = mysql_fetch_array($result);
-
-$i=0;
-while($i <= max(array_keys($row)))
-{
-	$header[$i] = mysql_field_name($result, $i);
-	echo "\n  <th>" . $header[$i] . "</th>";
-	$i++;
-}
-echo "\n</tr>\n";
-	$i=0;
-	$r=1;
-    while($i <= max(array_keys($row)))
-	{
-		//echo "\n <th>" . mysql_field_name($result, $i) . "</th>";
-		echo "<td>";
-		if ( !strncasecmp($row[$i],"http",4) )
-		{
-			echo '<a href="' . $row[$i] . '" target="_blank">_link_</a>';
-		}
-			
-		echo "<input name='$header[$i]$r' type='text' id='$header[$i]$r' value='$row[$i]'>" ; //.$row[$i]; 
-		//if ( !strncasecmp($row[$i],"http",4) )
-		//{
-		//	echo '</a>';
-		//}
-		
-		echo "</td>\n";
-		$i++;
-	}
-	
-echo '<button onclick="this.innerHTML=Date()">The time is?</button>'
-while($row = mysql_fetch_array($result)) {
-  echo "<tr>";
-  $i=0;
-  $r=2;
-    while($i <= max(array_keys($row)))
-	{
-		//echo "\n <th>" . mysql_field_name($result, $i) . "</th>";
-		echo "<td>";
-		if ( !strncasecmp($row[$i],"http",4) )
-		{
-			echo '<a href="' . $row[$i] . '" target="_blank">';
-		}
-			
-		echo $row[$i]; 
-		if ( !strncasecmp($row[$i],"http",4) )
-		{
-			echo '</a>';
-		}
-		
-		echo "</td>\n";
-		$i++;
-	}
-  echo "</tr>\n";
-}
-
-echo "</table>\n";
 mysql_close($conn);
 }
 */
 {
+?>
+
+<?php
+
+$query = "select Songs.Name, Songs.Band, This_week, Last_week, Chart_date, Username, List_name from Songs, Charts limit 10 ";
+to_table($query,"","");
 ?>
 
 <table width="600" border="0" cellspacing="1" cellpadding="2">

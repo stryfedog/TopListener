@@ -16,6 +16,12 @@ if(! $conn )
   die('Could not connect: ' . mysql_error());
 }
 
+$db_selected = mysql_select_db('stryfe3_TL', $conn);
+if (!$db_selected) {
+    die ('Can\'t use _TL_DB : ' . mysql_error());
+}
+
+
 if(! get_magic_quotes_gpc() )
 {
    $tutorial_title = addslashes ($_POST['tutorial_title']);
@@ -30,10 +36,6 @@ else
 }
 $submission_date = $_POST['submission_date'];
 
-$db_selected = mysql_select_db('stryfe3_TL', $conn);
-if (!$db_selected) {
-    die ('Can\'t use stryfe3_TL : ' . mysql_error());
-}
 
 
 
@@ -64,10 +66,12 @@ $sql = "INSERT INTO Songs ".
 /*
 //$sql = "SELECT * from tutorials_tbl";
 */
-$retval = mysql_query( $sql, $conn );
+if($_POST[Name] != "")
+{
+	$retval = mysql_query( $sql, $conn );
+}
 
-
-if(!$retval)
+if(!$retval and $_POST[Name] != "")
 {
 	echo 'Could not enter data: ' . "$sql \n" . mysql_error();
 }
