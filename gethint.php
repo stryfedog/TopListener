@@ -16,12 +16,13 @@ if(isset($_GET['find']))
 $limit_col = $_REQUEST["limit_col"];
 $col1 = $_REQUEST["sql_col"] ;
 $find = $_REQUEST["find"] ;
+$listrow = $_REQUEST["row"] ;
 
 $sql = "select distinct $col1 from Songs where $col1 like '$find%' and name like '$limit_col%' limit 10;";
 //echo $sql;
 $result = mysql_query($sql,$conn);
 $hint="";
-$col_quote = "'" . $_REQUEST["sql_col"] ."'";
+$col_quote = "'" . $_REQUEST["sql_col"] . $listrow ."'";
 for($i=0; $i<10; $i++)
 {
 	
